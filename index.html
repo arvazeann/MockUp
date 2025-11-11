@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="id"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Seni Tari | Ruang Tari Nusantara</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+     crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20XCpZcUjFZWvKmrRzo6p9zLefUWOiQDgLAHEYGZsH8="
+     crossorigin=""></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    
+    <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'], 
+            inter: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            'base-900': '#1A1A1A',
+            'base-800': '#2C2C2C',
+            'base-100': '#FDFBF6',
+            'accent-primary': '#800000',
+            'accent-secondary': '#D4AF37',
+          },
+        }
+      }
+    }
+    </script>
+
+    <style>
+        html { scroll-behavior: smooth; }
+        body { 
+            -webkit-font-smoothing: antialiased; 
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.4s ease-out;
+            font-family: 'Poppins', sans-serif;
+            background-color: #FDFBF6; 
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23800000' fill-opacity='0.04'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm-9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm-9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm-9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm-9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .dark body {
+            background-color: #1a1a1a;
+            background-image: radial-gradient(at 80% 10%, #2C2C2C 0px, transparent 50%),
+                              radial-gradient(at 10% 90%, #800000 0px, transparent 60%); 
+        }
+        .tilt-card {
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+        }
+        .tilt-card-inner { transform: translateZ(20px); }
+        .nav-link { position: relative; text-decoration: none; transition: color 0.3s ease; }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -4px; left: 0;
+            width: 0; height: 2px; background-color: #D4AF37; 
+            transition: width 0.3s ease-in-out;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* === STYLING 3D CAROUSEL & FLIP CARD === */
+        .gallery-container {
+            perspective: 1500px; display: flex; justify-content: center;
+            align-items: center; height: 500px; width: 100%; position: relative;
+        }
+        .carousel-wrapper {
+            position: relative; width: 300px; height: 420px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .carousel-card {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 12px; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+            color: #FFFFFF; cursor: pointer;
+            transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), 
+                        opacity 0.6s, z-index 0.6s;
+            backface-visibility: hidden; border: 1px solid #333;
+            transform-style: preserve-3d; perspective: 1000px;
+        }
+
+        /* === Posisi Carousel (DIMODIFIKASI untuk 5 Kartu) === */
+        .carousel-card.left-far {
+            transform: translateX(-90%) translateZ(-400px) rotateY(45deg);
+            z-index: 5;
+            opacity: 0.3;
+        }
+        .carousel-card.left {
+            transform: translateX(-50%) translateZ(-200px) rotateY(35deg);
+            z-index: 8;
+            opacity: 0.7;
+        }
+        .carousel-card.active {
+            transform: translateX(0) translateZ(0) rotateY(0deg);
+            z-index: 10;
+            opacity: 1;
+        }
+        .carousel-card.right {
+            transform: translateX(50%) translateZ(-200px) rotateY(-35deg);
+            z-index: 8;
+            opacity: 0.7;
+        }
+        .carousel-card.right-far {
+            transform: translateX(90%) translateZ(-400px) rotateY(-45deg);
+            z-index: 5;
+            opacity: 0.3;
+        }
+        .carousel-card.hidden {
+            transform: translateX(0) translateZ(-800px) rotateY(0deg);
+            z-index: 1;
+            opacity: 0; /* Opacity 0 agar benar-benar hilang */
+        }
+        
+        /* Konten Flip Card */
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .carousel-card.is-flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 12px; overflow: hidden;
+        }
+        .flip-card-front { background: #252525; color: white; }
+        .flip-card-back {
+            background: #FDFBF6; color: #1A1A1A;
+            transform: rotateY(180deg); padding: 24px;
+        }
+        .carousel-card img { width: 100%; height: 65%; object-fit: cover; }
+        .card-content { padding: 20px; }
+        .card-content h3 {
+            font-family: 'Poppins', sans-serif; margin: 0 0 10px 0;
+            font-size: 22px; font-weight: 600;
+        }
+        .card-content p {
+            font-size: 14px; font-weight: 400; line-height: 1.6; margin: 0;
+            display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3;
+            -webkit-box-orient: vertical; overflow: hidden;
+        }
+        /* Tombol Flip */
+        .flip-button {
+            margin-top: 15px; padding: 6px 12px; border-radius: 6px;
+            font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .flip-card-front .flip-button { background: #D4AF37; color: #1A1A1A; }
+        .flip-card-front .flip-button:hover { background: #b08f2d; }
+        .flip-card-back .flip-button { background: #800000; color: #FFFFFF; }
+        .flip-card-back .flip-button:hover { background: #600000; }
+
+        /* === STYLING MODAL POPUP === */
+        #modal-popup { transition: opacity 0.3s ease, visibility 0.3s ease; }
+        #modal-popup.visible { opacity: 1; visibility: visible; }
+        #modal-content { transition: opacity 0.3s ease, transform 0.3s ease; }
+        #modal-popup.visible #modal-content { opacity: 1; transform: scale(1); }
+    </style>
+</head>
+
+<body class="text-base-800 dark:text-slate-300">
+
+    <header class="fixed top-0 left-0 right-0 z-50 
+               bg-base-100/80 dark:bg-base-900/80 
+               backdrop-blur-md 
+               border-b border-slate-200 dark:border-base-800/50
+               shadow-sm">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="text-2xl font-semibold text-[#1E1E1E] dark:text-white flex-shrink-0">
+            Ruang Tari Nusantara
+        </div>
+        
+        <div class="flex items-center gap-10">
+            
+            <div class="hidden md:flex items-center gap-8 text-base-800 dark:text-slate-300">
+                <a href="#beranda" class="nav-link font-medium">Beranda</a>
+                <a href="#peta" class="nav-link font-medium">Peta</a>
+                <a href="#event" class="nav-link font-medium">Event</a>
+                <a href="#kursus-lowongan" class="nav-link font-medium">Kursus & Lowongan</a>
+                <a href="#jelajahi-tarian" class="nav-link font-medium">Jelajahi</a>
+                <a href="#forum" class="nav-link font-medium">Forum</a>
+            </div>
+
+            <div class="flex items-center gap-5">
+                <button class="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white flex-shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </button>
+                <button id="theme-toggle" class="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white flex-shrink-0">
+                    <svg id="icon-sun" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M12 12a5 5 0 100-10 5 5 0 000 10z"></path></svg>
+                    <svg id="icon-moon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+                
+                <a href="#profil" title="Profil Anda" class="w-9 h-9 bg-base-800 dark:bg-base-100 rounded-full flex items-center justify-center text-white dark:text-base-900 font-semibold text-sm">
+                    AW
+                </a>
+            </div>
+        </div>
+        
+    </nav>
+</header>
+
+    <main>
+        
+        <section id="beranda" class="min-h-screen flex flex-col justify-center items-center pt-20 px-6 ...">
+            <div class="text-center max-w-4xl z-10">
+                <h1 class="hero-reveal text-5xl md:text-7xl font-extrabold text-[#1E1E1E] dark:text-white mb-4">
+                    Menari Menyatukan Nusantara
+                </h1>
+                <p class="hero-reveal text-xl md:text-2xl text-base-800 dark:text-slate-300 mb-8" style="min-height: 2.25rem;">
+                    Temukan panggung, komunitas, dan event seni tari di seluruh Indonesia.
+                </p>
+                <div class="hero-reveal flex items-center justify-center gap-4 mt-10">
+                    <a href="#peta" class="px-8 py-3 bg-accent-primary text-white font-semibold rounded-lg shadow-lg shadow-accent-primary/30 transition-all duration-300 hover:bg-red-900 hover:shadow-xl">
+                        Lihat Peta Kegiatan
+                    </a>
+                    <a href="#forum" class="px-8 py-3 bg-white dark:bg-base-800 text-base-800 dark:text-white font-semibold rounded-lg shadow-lg dark:shadow-none border border-slate-200 dark:border-base-800 transition-all duration-300 hover:bg-slate-50 dark:hover:bg-base-800/50">
+                        Forum Komunitas
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="peta" class="py-24 px-6 bg-white/50 dark:bg-transparent">
+            <div class="container mx-auto">
+                <h2 class="section-title text-4xl font-bold text-center text-[#1E1E1E] dark:text-white mb-8">
+                    Peta Kegiatan Seni Tari
+                </h2>
+                <div class="section-title flex flex-wrap justify-center items-center gap-4 mb-12">
+                    <button class="px-5 py-2 rounded-full font-medium text-sm bg-accent-primary/10 text-accent-primary border border-accent-primary/20">
+                        Tari Tradisional
+                    </button>
+                    <button class="px-5 py-2 rounded-full font-medium text-sm bg-accent-secondary/10 text-accent-secondary border border-accent-secondary/20">
+                        Tari Kontemporer
+                    </button>
+                    <button class="px-5 py-2 rounded-full font-medium text-sm bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-500/20">
+                        Workshop
+                    </button>
+                </div>
+                <div class="section-title tilt-card w-full max-w-5xl mx-auto" data-tilt data-tilt-glare data-tilt-max-glare="0.2" data-tilt-scale="1.02">
+                    <div class="tilt-card-inner bg-white/50 dark:bg-base-900/50 backdrop-blur-md 
+                                border border-slate-200 dark:border-base-800/50 
+                                rounded-xl shadow-2xl dark:shadow-none p-4">
+                        
+                        <div id="map-container" class="w-full h-[500px] bg-slate-200 dark:bg-base-900 rounded-lg"></div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="event" class="py-24 px-6 bg-base-100/50 dark:bg-transparent">
+            <div class="container mx-auto">
+                <h2 class="section-title text-4xl font-bold text-center text-[#1E1E1E] dark:text-white mb-16">
+                    Event Tari Terbaru
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="section-title bg-white dark:bg-base-900/50 backdrop-blur-md border border-slate-200 dark:border-base-800/50 rounded-xl overflow-hidden shadow-lg dark:shadow-none">
+                        <div class="p-6">
+                            <span class="text-sm font-semibold text-accent-primary mb-2 block">10 NOV 2025</span>
+                            <h3 class="text-xl font-semibold text-slate-800 dark:text-white mb-3">Pagelaran Tari Kolosal</h3>
+                            <p class="text-base-800 dark:text-slate-400 text-sm mb-4">
+                                Lokasi: Candi Prambanan, Yogyakarta.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="section-title bg-white dark:bg-base-900/50 backdrop-blur-md border border-slate-200 dark:border-base-800/50 rounded-xl overflow-hidden shadow-lg dark:shadow-none">
+                        <div class="p-6">
+                            <span class="text-sm font-semibold text-accent-primary mb-2 block">08 NOV 2025</span>
+                            <h3 class="text-xl font-semibold text-slate-800 dark:text-white mb-3">Workshop Tari Topeng</h3>
+                            <p class="text-base-800 dark:text-slate-400 text-sm mb-4">
+                                Lokasi: Sanggar Tari Kemuning, Cirebon.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="section-title bg-white dark:bg-base-900/50 backdrop-blur-md border border-slate-200 dark:border-base-800/50 rounded-xl overflow-hidden shadow-lg dark:shadow-none">
+                        <div class="p-6">
+                            <span class="text-sm font-semibold text-accent-primary mb-2 block">05 NOV 2025</span>
+                            <h3 class="text-xl font-semibold text-slate-800 dark:text-white mb-3">Pentas Tari Kecak</h3>
+                            <p class="text-base-800 dark:text-slate-400 text-sm mb-4">
+                                Lokasi: Pura Uluwatu, Bali.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="kursus-lowongan" class="py-24 px-6 bg-white/50 dark:bg-transparent">
+            <div class="container mx-auto">
+                <h2 class="section-title text-4xl font-bold text-center text-[#1E1E1E] dark:text-white mb-16">
+                    Kembangkan Karir Tari Anda
+                </h2>
+        
+                <div x-data="{ tab: 'kursus' }" class="max-w-4xl mx-auto">
+                    <div class="flex justify-center border-b border-slate-200 dark:border-base-800 mb-10">
+                        <button @click="tab = 'kursus'" 
+                                :class="tab === 'kursus' ? 'border-accent-primary text-accent-primary' : 'border-transparent text-slate-500'"
+                                class="px-8 py-3 font-semibold border-b-2 transition-all duration-300">
+                            Kursus Tari
+                        </button>
+                        <button @click="tab = 'lowongan'" 
+                                :class="tab === 'lowongan' ? 'border-accent-primary text-accent-primary' : 'border-transparent text-slate-500'"
+                                class="px-8 py-3 font-semibold border-b-2 transition-all duration-300">
+                            Lowongan
+                        </button>
+                    </div>
+        
+                    <div class="space-y-6">
+                        <div x-show="tab === 'kursus'" class="space-y-6">
+                            <div class="section-title bg-white dark:bg-base-900/50 backdrop-blur-md border border-slate-200 dark:border-base-800/50 rounded-xl shadow-lg dark:shadow-none p-6 flex items-center gap-6">
+                                <img src="https://images.unsplash.com/photo-1599707355043-690f5d886915?w=100&h=100&fit=crop&crop=center" alt="Kursus" class="w-24 h-24 rounded-lg object-cover flex-shrink-0">
+                                <div>
+                                    <span class="text-sm font-semibold text-accent-secondary mb-1 block">ONLINE</span>
+                                    <h3 class="text-xl font-semibold text-slate-800 dark:text-white mb-2">Masterclass Tari Kontemporer</h3>
+                                    <p class="text-base-800 dark:text-slate-400 text-sm mb-4">Oleh: Eko Supriyanto</p>
+                                    <a href="#" class="px-5 py-2 bg-accent-primary text-white text-sm font-semibold rounded-lg transition-all duration-300 hover:bg-red-900">Daftar</a>
+                                </div>
+                            </div>
+                            <div class="section-title bg-white dark:bg-base-900/50 backdrop-blur-md border border-slate-200 dark:border-base-800/50 rounded-xl shadow-lg dark:shadow-none p-6 flex items-center gap-6">
+                                <img src="https://images.unsplash.com/photo-1531763182312-d81201ab4685?w=100&h=100&fit=crop&crop=center" alt="Kursus" class="w-24 h-24 rounded-lg object-cover flex-shrink-0">
+                                <div>
+                                    <span class="text-sm font-semibold text-accent-primary mb-1 block">OFFLINE (BALI)</span>
+                                    <h3 class="text-xl font-semibold text-slate-800 dark:text-white mb-2">Dasar-Dasar Tari Kecak</h3>
+                                    <p class="text-base-800 dark:text-slate-400 text-sm mb-4">Lokasi: Sanggar Tari Uluwatu</p>
+                                    <a href="#" class="px-5 py-2 bg-accent-primary text-white text-sm font-semibold rounded-lg transition-all duration-300 hover:bg-red-900">Lihat Detail</a>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div x-show="tab === 'lowongan'" class="space-y-6">
+                            <div class="section-title bg-white dark:bg-base-900/50 backdrop-blur-md border border-slate-200 dark:border-base-800/50 rounded-xl shadow-lg dark:shadow-none p-6">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <span class="text-sm font-semibold text-accent-secondary mb-1 block">FULL-TIME</span>
+                                        <h3 class="text-xl font-semibold text-slate-800 dark:text-white mb-2">Penari Profesional (Pagelaran Kolosal)</h3>
+                                        <p class="text-base-800 dark:text-slate-400 text-sm">Lokasi: Jakarta</p>
+                                        <p class="text-base-800 dark:text-slate-400 text-sm">Perusahaan: Teater Nusantara</p>
+                                    </div>
+                                    <a href="#" class="px-5 py-2 bg-accent-secondary text-base-900 text-sm font-semibold rounded-lg transition-all duration-300 hover:bg-yellow-600">Lamar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="jelajahi-tarian" class="py-24 px-6 bg-base-100/50 dark:bg-base-900/80 dark:bg-opacity-80 overflow-hidden">
+            <div class="container mx-auto">
+                <h2 class="section-title text-4xl font-bold text-center text-[#1E1E1E] dark:text-white mb-16">
+                    Jelajahi Ragam Tari
+                </h2>
+
+                <div class="gallery-container">
+                    
+                    <button id="carousel-prev" class="absolute left-0 md:left-12 top-1/2 z-30 transform -translate-y-1/2 
+                                                    bg-white/50 dark:bg-base-900/50 backdrop-blur-md 
+                                                    hover:bg-white/80 dark:hover:bg-base-900/80
+                                                    border border-slate-200 dark:border-base-800/50 
+                                                    rounded-full shadow-lg w-12 h-12 flex items-center justify-center
+                                                    text-base-900 dark:text-white transition-all duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+
+                    <button id="carousel-next" class="absolute right-0 md:right-12 top-1/2 z-30 transform -translate-y-1/2
+                                                    bg-white/50 dark:bg-base-900/50 backdrop-blur-md 
+                                                    hover:bg-white/80 dark:hover:bg-base-900/80
+                                                    border border-slate-200 dark:border-base-800/50 
+                                                    rounded-full shadow-lg w-12 h-12 flex items-center justify-center
+                                                    text-base-900 dark:text-white transition-all duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+
+                    <div class="carousel-wrapper" id="carousel-container">
+                        
+                        <div class="carousel-card flip-card" 
+                             data-img="https://images.unsplash.com/photo-1579483321154-4f3b6d1656c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjUyOXwwfDF8c2VhcmNofDF8fHNhbWFuJTIwZGFuY2V8ZW58MHx8fHwxNzIyMjExNDMxfDA&ixlib=rb-4.0.3&q=80&w=400" 
+                             data-title="Tari Saman" 
+                             data-desc-short="Tari dari Suku Gayo, Aceh..."
+                             data-desc-full="Tari Saman adalah sebuah tarian Suku Gayo yang biasa ditampilkan untuk merayakan peristiwa-peristiwa penting dalam adat. Syair dalam tarian ini menggunakan Bahasa Gayo. Tarian ini dicirikan dengan gerakan tangan yang cepat dan kompak, serta harmoni vokal para penarinya.">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front">
+                                    <img src="https://images.unsplash.com/photo-1579483321154-4f3b6d1656c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjUyOXwwfDF8c2VhcmNofDF8fHNhbWFuJTIwZGFuY2V8ZW58MHx8fHwxNzIyMjExNDMxfDA&ixlib=rb-4.0.3&q=80&w=400" alt="Tari Saman">
+                                    <div class="card-content">
+                                        <h3>Tari Saman</h3>
+                                        <p>Tari dari Suku Gayo, Aceh, yang menonjolkan kekompakan gerakan tangan dan kecepatan.</p>
+                                        <button class="flip-button">Lihat Info</button>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back">
+                                    <p>Tari Saman telah diakui oleh UNESCO sebagai Warisan Budaya Takbenda. Tarian ini tidak menggunakan alat musik, melainkan iringan vokal...</p>
+                                    <button class="flip-button">Kembali</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="carousel-card flip-card" 
+                             data-img="https://images.unsplash.com/photo-1531763182312-d81201ab4685?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjUyOXwwfDF8c2VhcmNofDF8fGtlY2FrJTIwZGFuY2V8ZW58MHx8fHwxNzIyMjExNDY1fDA&ixlib=rb-4.0.3&q=80&w=400" 
+                             data-title="Tari Kecak" 
+                             data-desc-short="Tarian drama musikal dari Bali..."
+                             data-desc-full="Tari Kecak adalah pertunjukan drama-tari seni khas Bali yang lebih utama menceritakan mengenai Ramayana dan dimainkan terutama oleh laki-laki. Tarian ini dipertunjukkan oleh banyak (puluhan atau lebih) penari laki-laki yang duduk berbaris melingkar...">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front">
+                                    <img src="https://images.unsplash.com/photo-1531763182312-d81201ab4685?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjUyOXwwfDF8c2VhcmNofDF8fGtlY2FrJTIwZGFuY2V8ZW58MHx8fHwxNzIyMjExNDY1fDA&ixlib=rb-4.0.3&q=80&w=400" alt="Tari Kecak">
+                                    <div class="card-content">
+                                        <h3>Tari Kecak</h3>
+                                        <p>Tarian drama musikal dari Bali yang menceritakan kisah Ramayana, diiringi paduan suara 'cak'.</p>
+                                        <button class="flip-button">Lihat Info</button>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back">
+                                    <p>Tarian ini unik karena tidak diiringi oleh gamelan, melainkan oleh paduan suara penarinya. Sering dipentaskan saat matahari terbenam...</p>
+                                    <button class="flip-button">Kembali</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="carousel-card flip-card" 
+                             data-img="https://images.unsplash.com/photo-1629835003903-f363c43ea560?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjUyOXwwfDF8c2VhcmNofDF8fHRhcmklMjB0b3BlbmclMjBpbmRvbmVzaWF8ZW58MHx8fHwxNzIyMjAyOTI2fDA&ixlib=rb-4.0.3&q=80&w=400"
+                             data-title="Tari Topeng" 
+                             data-desc-short="Tarian dari Cirebon, Jawa Barat..."
+                             data-desc-full="Tari Topeng Cirebon adalah salah satu tarian di tatar Parahyangan. Tarian ini sarat dengan makna simbolis, menceritakan lima fase kehidupan manusia (Panji, Samba, Rumyang, Tumenggung, dan Kelana) yang masing-masing direpresentasikan oleh topeng yang berbeda.">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front">
+                                    <img src="https://images.unsplash.com/photo-1629835003903-f363c43ea560?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjUyOXwwfDF8c2VhcmNofDF8fHRhcmklMjB0b3BlbmclMjBpbmRvbmVzaWF8ZW58MHx8fHwxNzIyMjAyOTI2fDA&ixlib=rb-4.0.3&q=80&w=400" alt="Tari Topeng">
+                                    <div class="card-content">
+                                        <h3>Tari Topeng</h3>
+                                        <p>Tarian dari Cirebon, Jawa Barat, yang menggunakan topeng sebagai representasi karakter.</p>
+                                        <button class="flip-button">Lihat Info</button>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back">
+                                    <p>Setiap topeng (Panca Wanda) memiliki filosofi mendalam, menggambarkan sifat manusia dari lahir (putih/Panji) hingga dewasa (merah/Kelana).</p>
+                                    <button class="flip-button">Kembali</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="carousel-card flip-card" 
+                             data-img="https://images.unsplash.com/photo-1701386153709-b7b55f135634?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjUyOXwwfDF8c2VhcmNofDF8fHRhcmklMjBwaXJpbmclMjBpbmRvbmVzaWF8ZW58MHx8fHwxNzIyMjExNTM4fDA&ixlib=rb-4.0.3&q=80&w=400"
+                             data-title="Tari Piring" 
+                             data-desc-short="Tari tradisional Minangkabau..."
+                             data-desc-full="Tari Piring adalah tarian tradisional Minangkabau yang menampilkan atraksi menggunakan piring. Para penari mengayunkan piring di tangan mereka dengan gerakan yang cepat dan teratur, tanpa melepaskan piring dari telapak tangan. Tarian ini awalnya merupakan ritual ucapan syukur kepada dewa-dewa.">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front">
+                                    <img src="https://images.unsplash.com/photo-1701386153709-b7b55f135634?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjUyOXwwfDF8c2VhcmNofDF8fHRhcmklMjBwaXJpbmclMjBpbmRvbmVzaWF8ZW58MHx8fHwxNzIyMjExNTM4fDA&ixlib=rb-4.0.3&q=80&w=400" alt="Tari Piring">
+                                    <div class="card-content">
+                                        <h3>Tari Piring</h3>
+                                        <p>Tari tradisional Minangkabau yang menampilkan atraksi menari dengan piring di telapak tangan.</p>
+                                        <button class="flip-button">Lihat Info</button>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back">
+                                    <p>Pada puncaknya, penari akan melemparkan piring ke lantai dan menari di atas pecahan piring tersebut. Ini melambangkan kesucian hati dan niat.</p>
+                                    <button class="flip-button">Kembali</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="carousel-card flip-card" 
+                             data-img="https://images.unsplash.com/photo-1698683100624-a20c3a2f7f1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjUyOXwwfDF8c2VhcmNofDZ8fGphaXBvbmclMjBkYW5jZXxlbnwwfHx8fDE3MjIyMTE1NzV8MA&ixlib=rb-4.0.3&q=80&w=400"
+                             data-title="Tari Jaipong" 
+                             data-desc-short="Tarian pergaulan dari Jawa Barat..."
+                             data-desc-full="Jaipongan adalah sebuah genre seni tari yang lahir dari kreativitas seorang seniman asal Bandung, Gugum Gumbira. Tarian ini merupakan pengembangan dari tari-tari tradisional Sunda seperti Ketuk Tilu dan Pencak Silat. Gerakannya dinamis, enerjik, dan terkadang sedikit sensual, mencerminkan semangat pergaulan.">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front">
+                                    <img src="https://images.unsplash.com/photo-1698683100624-a20c3a2f7f1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjUyOXwwfDF8c2VhcmNofDZ8fGphaXBvbmclMjBkYW5jZXxlbnwwfHx8fDE3MjIyMTE1NzV8MA&ixlib=rb-4.0.3&q=80&w=400" alt="Tari Jaipong">
+                                    <div class="card-content">
+                                        <h3>Tari Jaipong</h3>
+                                        <p>Tarian pergaulan dari Jawa Barat yang enerjik dan merupakan hasil kreasi modern dari tarian tradisional.</p>
+                                        <button class="flip-button">Lihat Info</button>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back">
+                                    <p>Meskipun kreasi baru (lahir tahun 1970-an), Jaipong dengan cepat menjadi ikon tarian Jawa Barat dan sering ditampilkan dalam acara-acara...</p>
+                                    <button class="flip-button">Kembali</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="eksplor" class="py-24 px-6 bg-white/50 dark:bg-transparent">
+            <div class="container mx-auto max-w-4xl">
+                 <h2 class="section-title text-4xl font-bold text-center text-[#1E1E1E] dark:text-white mb-12">
+                    Eksplorasi Minat Tari Anda
+                </h2>
+                <div class="section-title tilt-card" data-tilt data-tilt-glare data-tilt-max-glare="0.1" data-tilt-scale="1.02">
+                    <div class="tilt-card-inner bg-white dark:bg-base-900/50 backdrop-blur-md 
+                                border border-slate-200 dark:border-base-800/50 
+                                rounded-xl shadow-xl dark:shadow-none p-8">
+                        
+                        <form class="space-y-6">
+                           <div>
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">1. Tuan lebih menyukai gerakan yang:</label>
+                                <div class="flex gap-4">
+                                    <button type="button" class="flex-1 px-4 py-3 text-left bg-slate-100 dark:bg-base-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-secondary">Enerjik & Dinamis</button>
+                                    <button type="button" class="flex-1 px-4 py-3 text-left bg-slate-100 dark:bg-base-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-secondary">Lembut & Meditatif</button>
+                                </div>
+                            </div>
+                            <div class="text-center pt-4">
+                                <button type="submit" class="px-10 py-3 bg-accent-secondary text-base-900 font-semibold rounded-lg shadow-lg shadow-accent-secondary/30 transition-all duration-300 hover:bg-yellow-600 hover:shadow-xl">
+                                    Temukan Tarian!
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="forum" class="py-24 px-6 bg-base-100/50 dark:bg-transparent">
+            <div class="container mx-auto">
+                <h2 class="section-title text-4xl font-bold text-center text-[#1E1E1E] dark:text-white mb-16">
+                    Forum Tari Nusantara
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="forum-card tilt-card bg-white dark:bg-base-900/50 backdrop-blur-md border border-slate-200 dark:border-base-800/50 rounded-xl overflow-hidden shadow-lg dark:shadow-none" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-scale="1.05">
+                        <div class="tilt-card-inner p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <img src="https://ui-avatars.com/api/?name=Andi+W&background=800000&color=fff&rounded=true" alt="User" class="w-10 h-10 rounded-full">
+                                <span class="font-semibold text-slate-800 dark:text-white">Andi Wijaya</span>
+                            </div>
+                            <p class="text-base-800 dark:text-slate-400 mb-4 text-sm">
+                                "Tips Menari Saman: Teknik dasar dan pola lantai yang sinkron untuk pemula."
+                            </p>
+                        </div>
+                    </div>
+                    <div class="forum-card tilt-card ...">...</div>
+                    <div class="forum-card tilt-card ...">...</div>
+                </div>
+                <div class="text-center mt-16">
+                    <a href="#forum-page" class="section-title px-8 py-3 bg-accent-primary/10 text-accent-primary ...">
+                        Lihat Forum Lengkap
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="tentang" class="py-24 px-6 bg-white/50 dark:bg-transparent">
+            <div class="container mx-auto max-w-3xl text-center">
+                <h2 class="section-title text-4xl font-bold text-center text-[#1E1E1E] dark:text-white mb-8">
+                    Tentang Platform Ini
+                </h2>
+                <div class="section-title space-y-4 text-base-800 dark:text-slate-300 text-lg leading-relaxed">
+                    <p>
+                        Platform ini didedikasikan untuk komunitas seni tari di seluruh Nusantara. Misi kami adalah menjadi pusat informasi...
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="kontak" class="bg-base-900 text-[#F1F1F1] py-16 px-6">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div>
+                <h3 class="text-xl font-semibold text-white mb-4">Ruang Tari Nusantara</h3>
+                <p class="font-light text-slate-300 leading-relaxed">
+                    Platform digital untuk pemetaan, event, dan kolaborasi komunitas seni tari Indonesia.
+                </p>
+            </div>
+            <div>... Links ...</div>
+            <div>... Media Sosial ...</div>
+        </div>
+        <div class="container mx-auto text-center mt-12 border-t border-base-800 pt-8">
+            <p class="text-slate-400 text-sm font-light">
+                © 2025 Ruang Tari Nusantara.
+            </p>
+        </div>
+    </footer>
+
+    <div id="modal-popup" class="fixed inset-0 z-[100] flex items-center justify-center p-4 
+                                bg-black/50 backdrop-blur-sm 
+                                opacity-0 invisible">
+        <div id="modal-content" class="bg-white dark:bg-base-800 rounded-lg shadow-xl max-w-3xl w-full
+                                    transform scale-95 opacity-0">
+            <img id="modal-image" src="" alt="Detail Tarian" class="w-full h-80 object-cover rounded-t-lg">
+            <div class="p-8">
+                <h2 id="modal-title" class="text-4xl font-bold text-[#1E1E1E] dark:text-white mb-4"></h2>
+                <p id="modal-description" class="text-base-800 dark:text-slate-300 mb-8 leading-relaxed"></p>
+                <button id="modal-close" class="px-8 py-3 bg-accent-primary text-white font-semibold rounded-lg shadow-lg shadow-accent-primary/30 transition-all duration-300 hover:bg-red-900">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 1. MODUL THEME TOGGLE ---
+            const toggleButton = document.getElementById('theme-toggle');
+            const iconSun = document.getElementById('icon-sun');
+            const iconMoon = document.getElementById('icon-moon');
+            const root = document.documentElement;
+
+            function updateThemeUI(isDark) {
+                root.classList.toggle('dark', isDark);
+                iconSun.style.display = isDark ? 'block' : 'none';
+                iconMoon.style.display = isDark ? 'none' : 'block';
+            }
+            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            updateThemeUI(savedTheme === 'dark');
+            
+            toggleButton.addEventListener('click', () => {
+                const isDark = root.classList.contains('dark');
+                const newTheme = isDark ? 'light' : 'dark';
+                updateThemeUI(newTheme === 'dark');
+                localStorage.setItem('theme', newTheme);
+                // Listener untuk peta ada di modul Peta (Modul 5)
+            });
+
+
+            // --- 2. MODUL 3D TILT ---
+            VanillaTilt.init(document.querySelectorAll(".tilt-card, .forum-card"), {
+                max: 10, speed: 400, glare: true, "max-glare": 0.15,
+            });
+
+
+            // --- 3. MODUL ANIMASI GSAP ---
+            gsap.registerPlugin(ScrollTrigger);
+            gsap.from(".hero-reveal", {
+                duration: 1.0, opacity: 0, y: 30, stagger: 0.2,
+                ease: "power3.out", delay: 0.5
+            });
+            gsap.utils.toArray('.section-title').forEach(el => {
+                gsap.from(el, {
+                    scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none none" },
+                    duration: 1.0, opacity: 0, y: 20, ease: "power3.out"
+                });
+            });
+            gsap.from(".forum-card", {
+                scrollTrigger: { trigger: "#forum", start: "top 70%"},
+                duration: 0.8, opacity: 0, y: 50, stagger: 0.2, ease: "power3.out"
+            });
+
+
+            // --- 4. MODUL 3D CAROUSEL, FLIP, & MODAL (VERSI 5 KARTU) ---
+            const carouselCards = document.querySelectorAll('.carousel-card');
+            const totalCards = carouselCards.length;
+            let currentIndex = 0;
+
+            // Elemen Tombol Navigasi
+            const carouselPrevBtn = document.getElementById('carousel-prev');
+            const carouselNextBtn = document.getElementById('carousel-next');
+
+            // Elemen Modal
+            const modal = document.getElementById('modal-popup');
+            const modalContent = document.getElementById('modal-content');
+            const modalCloseBtn = document.getElementById('modal-close');
+            const modalImg = document.getElementById('modal-image');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDesc = document.getElementById('modal-description');
+            
+            // Elemen Tombol Flip
+            const flipButtons = document.querySelectorAll('.flip-button');
+
+            if (totalCards > 0) {
+                // --- FUNGSI CAROUSEL (DIMODIFIKASI) ---
+                function updateCarousel(newIndex, instant = false) {
+                    currentIndex = (newIndex + totalCards) % totalCards;
+                    
+                    // Index untuk 5 kartu
+                    const leftIndex = (currentIndex - 1 + totalCards) % totalCards;
+                    const rightIndex = (currentIndex + 1) % totalCards;
+                    const farLeftIndex = (currentIndex - 2 + totalCards) % totalCards;
+                    const farRightIndex = (currentIndex + 2) % totalCards;
+
+                    carouselCards.forEach((card, index) => {
+                        card.classList.remove('is-flipped'); 
+                        
+                        if (instant) {
+                            card.style.transition = 'none';
+                        } else {
+                            card.style.transition = '';
+                        }
+                        
+                        card.classList.remove('active', 'left', 'right', 'left-far', 'right-far', 'hidden');
+
+                        if (index === currentIndex) {
+                            card.classList.add('active');
+                        } else if (index === leftIndex) {
+                            card.classList.add('left');
+                        } else if (index === rightIndex) {
+                            card.classList.add('right');
+                        } else if (index === farLeftIndex) {
+                            card.classList.add('left-far');
+                        } else if (index === farRightIndex) {
+                            card.classList.add('right-far');
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    });
+                    
+                    if (instant) {
+                        void carouselCards[0].offsetWidth; // Memicu reflow
+                        carouselCards.forEach(card => card.style.transition = '');
+                    }
+                }
+
+                // --- FUNGSI MODAL ---
+                function openModal(card) {
+                    const img = card.getAttribute('data-img');
+                    const title = card.getAttribute('data-title');
+                    const desc = card.getAttribute('data-desc-full');
+
+                    modalImg.src = img;
+                    modalTitle.textContent = title;
+                    modalDesc.textContent = desc;
+
+                    modal.classList.add('visible');
+                }
+
+                function closeModal() {
+                    modal.classList.remove('visible');
+                }
+
+                // --- EVENT LISTENERS ---
+
+                // 1. Event Listener untuk Navigasi Carousel (Klik Kartu)
+                carouselCards.forEach((card, index) => {
+                    card.addEventListener('click', (e) => {
+                        if (e.target.classList.contains('flip-button')) return;
+
+                        if (index === currentIndex) {
+                            openModal(card);
+                        } else if (card.classList.contains('left')) {
+                            updateCarousel(currentIndex - 1);
+                        } else if (card.classList.contains('right')) {
+                            updateCarousel(currentIndex + 1);
+                        } else if (card.classList.contains('left-far')) {
+                            updateCarousel(currentIndex - 2); // Lompat 2
+                        } else if (card.classList.contains('right-far')) {
+                            updateCarousel(currentIndex + 2); // Lompat 2
+                        } else {
+                            updateCarousel(index);
+                        }
+                    });
+                });
+
+                // 2. Event Listener untuk Tombol Flip
+                flipButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const card = button.closest('.carousel-card');
+                        if (card) card.classList.toggle('is-flipped');
+                    });
+                });
+
+                // 3. Event Listener untuk Menutup Modal
+                modalCloseBtn.addEventListener('click', closeModal);
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeModal();
+                });
+
+                // 4. Event Listener untuk Tombol Navigasi (BARU)
+                carouselPrevBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    updateCarousel(currentIndex - 1);
+                });
+
+                carouselNextBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    updateCarousel(currentIndex + 1);
+                });
+
+                // Inisialisasi carousel
+                updateCarousel(0, true);
+            }
+
+
+            // --- 5. MODUL PETA INTERAKTIF LEAFLET ---
+            function initMap() {
+                const isDark = document.documentElement.classList.contains('dark');
+                
+                const tileUrl = isDark 
+                    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+                    : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+                
+                const mapElement = document.getElementById('map-container');
+                if (!mapElement) return;
+
+                if (mapElement._leaflet_id) {
+                    mapElement.innerHTML = '';
+                    delete mapElement._leaflet_id;
+                }
+                    
+                const map = L.map('map-container').setView([-2.5489, 118.0149], 5);
+
+                L.tileLayer(tileUrl, {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                    subdomains: 'abcd',
+                    maxZoom: 19
+                }).addTo(map);
+
+                const locations = [
+                    { lat: -6.2088, lng: 106.8456, title: "Event: Pagelaran Tari", type: "Event" },
+                    { lat: -7.2575, lng: 112.7521, title: "Kursus: Tari Topeng", type: "Kursus" },
+                    { lat: -8.6705, lng: 115.2126, title: "Lowongan: Penari Kecak", type: "Lowongan" }
+                ];
+
+                locations.forEach(loc => {
+                    L.marker([loc.lat, loc.lng])
+                     .addTo(map)
+                     .bindPopup(`<b>${loc.title}</b><br>Kategori: ${loc.type}`);
+                });
+            }
+
+            // Panggil initMap() saat DOM siap
+            initMap();
+
+            // Inisialisasi ulang peta saat tema berganti
+            toggleButton.addEventListener('click', () => {
+                setTimeout(initMap, 100); 
+            });
+
+        });
+    </script>
+</body>
+</html>
